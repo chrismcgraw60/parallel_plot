@@ -367,9 +367,13 @@ function setBrushExtent(axisKey: string, min: number, max: number) {
   );
 
   if (existingIndex >= 0) {
-    brushExtents.value[existingIndex] = { axisKey, min, max };
+    // Create new array to trigger reactivity
+    brushExtents.value = brushExtents.value.map((b, i) =>
+      i === existingIndex ? { axisKey, min, max } : b
+    );
   } else {
-    brushExtents.value.push({ axisKey, min, max });
+    // Create new array to trigger reactivity
+    brushExtents.value = [...brushExtents.value, { axisKey, min, max }];
   }
 
   emit('filterChange', {
