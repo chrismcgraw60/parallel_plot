@@ -40,10 +40,10 @@ export function generateRobot(id: number): Robot {
     id: `robot-${id}`,
     label: `Robot ${id}`,
     values: {
-      value2: randomInRange(0, 100),
-      value3: randomInRange(0, 100),
-      value4: randomInRange(0, 100),
-      value5: randomInRange(0, 100),
+      speed: randomInRange(0, 100),
+      strength: randomInRange(0, 100),
+      intelligence: randomInRange(0, 100),
+      battery: randomInRange(0, 100),
     },
     color: ROBOT_COLORS[id % ROBOT_COLORS.length],
   };
@@ -60,27 +60,47 @@ export function generateRobots(count: number): Robot[] {
 }
 
 /**
- * Pre-generated sample data for consistent testing.
+ * Pre-generated sample data with varied attribute distributions.
+ * Mix of specialists (high in one area) and generalists (balanced).
  */
 export const SAMPLE_ROBOTS: Robot[] = [
-  { id: 'robot-1', label: 'Robot 1', values: { value2: 85, value3: 72, value4: 91, value5: 68 }, color: '#ef4444' },
-  { id: 'robot-2', label: 'Robot 2', values: { value2: 45, value3: 88, value4: 33, value5: 77 }, color: '#f97316' },
-  { id: 'robot-3', label: 'Robot 3', values: { value2: 92, value3: 65, value4: 78, value5: 84 }, color: '#eab308' },
-  { id: 'robot-4', label: 'Robot 4', values: { value2: 28, value3: 41, value4: 56, value5: 39 }, color: '#22c55e' },
-  { id: 'robot-5', label: 'Robot 5', values: { value2: 71, value3: 93, value4: 82, value5: 95 }, color: '#06b6d4' },
-  { id: 'robot-6', label: 'Robot 6', values: { value2: 63, value3: 37, value4: 69, value5: 52 }, color: '#3b82f6' },
-  { id: 'robot-7', label: 'Robot 7', values: { value2: 89, value3: 76, value4: 94, value5: 87 }, color: '#8b5cf6' },
-  { id: 'robot-8', label: 'Robot 8', values: { value2: 34, value3: 58, value4: 21, value5: 46 }, color: '#ec4899' },
-  { id: 'robot-9', label: 'Robot 9', values: { value2: 77, value3: 84, value4: 66, value5: 73 }, color: '#6366f1' },
-  { id: 'robot-10', label: 'Robot 10', values: { value2: 51, value3: 29, value4: 87, value5: 62 }, color: '#14b8a6' },
-  { id: 'robot-11', label: 'Robot 11', values: { value2: 96, value3: 91, value4: 88, value5: 93 }, color: '#ef4444' },
-  { id: 'robot-12', label: 'Robot 12', values: { value2: 42, value3: 67, value4: 54, value5: 81 }, color: '#f97316' },
-  { id: 'robot-13', label: 'Robot 13', values: { value2: 18, value3: 23, value4: 31, value5: 27 }, color: '#eab308' },
-  { id: 'robot-14', label: 'Robot 14', values: { value2: 83, value3: 79, value4: 71, value5: 86 }, color: '#22c55e' },
-  { id: 'robot-15', label: 'Robot 15', values: { value2: 59, value3: 44, value4: 92, value5: 38 }, color: '#06b6d4' },
-  { id: 'robot-16', label: 'Robot 16', values: { value2: 74, value3: 96, value4: 63, value5: 79 }, color: '#3b82f6' },
-  { id: 'robot-17', label: 'Robot 17', values: { value2: 31, value3: 52, value4: 47, value5: 55 }, color: '#8b5cf6' },
-  { id: 'robot-18', label: 'Robot 18', values: { value2: 67, value3: 81, value4: 76, value5: 69 }, color: '#ec4899' },
-  { id: 'robot-19', label: 'Robot 19', values: { value2: 88, value3: 34, value4: 99, value5: 91 }, color: '#6366f1' },
-  { id: 'robot-20', label: 'Robot 20', values: { value2: 23, value3: 69, value4: 42, value5: 33 }, color: '#14b8a6' },
+  // Speedsters - high speed, lower other stats
+  { id: 'robot-1', label: 'Robot 1', values: { speed: 95, strength: 30, intelligence: 45, battery: 60 }, color: '#ef4444' },
+  { id: 'robot-2', label: 'Robot 2', values: { speed: 88, strength: 25, intelligence: 50, battery: 55 }, color: '#f97316' },
+
+  // Tanks - high strength, slower
+  { id: 'robot-3', label: 'Robot 3', values: { speed: 25, strength: 92, intelligence: 40, battery: 70 }, color: '#eab308' },
+  { id: 'robot-4', label: 'Robot 4', values: { speed: 30, strength: 85, intelligence: 35, battery: 80 }, color: '#22c55e' },
+
+  // Brainiacs - high intelligence
+  { id: 'robot-5', label: 'Robot 5', values: { speed: 40, strength: 35, intelligence: 95, battery: 50 }, color: '#06b6d4' },
+  { id: 'robot-6', label: 'Robot 6', values: { speed: 45, strength: 40, intelligence: 90, battery: 45 }, color: '#3b82f6' },
+
+  // Endurance - high battery
+  { id: 'robot-7', label: 'Robot 7', values: { speed: 55, strength: 50, intelligence: 55, battery: 95 }, color: '#8b5cf6' },
+  { id: 'robot-8', label: 'Robot 8', values: { speed: 50, strength: 45, intelligence: 60, battery: 90 }, color: '#ec4899' },
+
+  // All-rounders - balanced stats
+  { id: 'robot-9', label: 'Robot 9', values: { speed: 65, strength: 70, intelligence: 68, battery: 72 }, color: '#6366f1' },
+  { id: 'robot-10', label: 'Robot 10', values: { speed: 70, strength: 65, intelligence: 72, battery: 68 }, color: '#14b8a6' },
+
+  // Elite - high across the board
+  { id: 'robot-11', label: 'Robot 11', values: { speed: 85, strength: 80, intelligence: 88, battery: 82 }, color: '#ef4444' },
+  { id: 'robot-12', label: 'Robot 12', values: { speed: 82, strength: 85, intelligence: 80, battery: 88 }, color: '#f97316' },
+
+  // Struggling - low stats (red zone)
+  { id: 'robot-13', label: 'Robot 13', values: { speed: 20, strength: 25, intelligence: 22, battery: 28 }, color: '#eab308' },
+  { id: 'robot-14', label: 'Robot 14', values: { speed: 15, strength: 18, intelligence: 28, battery: 20 }, color: '#22c55e' },
+
+  // Mixed specialists
+  { id: 'robot-15', label: 'Robot 15', values: { speed: 90, strength: 88, intelligence: 30, battery: 35 }, color: '#06b6d4' },
+  { id: 'robot-16', label: 'Robot 16', values: { speed: 28, strength: 32, intelligence: 85, battery: 92 }, color: '#3b82f6' },
+
+  // Average performers (amber zone)
+  { id: 'robot-17', label: 'Robot 17', values: { speed: 45, strength: 50, intelligence: 48, battery: 52 }, color: '#8b5cf6' },
+  { id: 'robot-18', label: 'Robot 18', values: { speed: 52, strength: 48, intelligence: 55, battery: 45 }, color: '#ec4899' },
+
+  // More variety
+  { id: 'robot-19', label: 'Robot 19', values: { speed: 75, strength: 60, intelligence: 85, battery: 40 }, color: '#6366f1' },
+  { id: 'robot-20', label: 'Robot 20', values: { speed: 35, strength: 78, intelligence: 42, battery: 88 }, color: '#14b8a6' },
 ];

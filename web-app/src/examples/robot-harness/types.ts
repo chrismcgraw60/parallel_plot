@@ -7,9 +7,9 @@
 import type { DomainObject, AxisConfig, AxisRanges, Range } from '../../components/parallel-plot/types';
 
 /**
- * Robot attribute keys.
+ * Robot attribute keys - meaningful robot characteristics.
  */
-export type RobotAttributeKey = 'value2' | 'value3' | 'value4' | 'value5';
+export type RobotAttributeKey = 'speed' | 'strength' | 'intelligence' | 'battery';
 
 /**
  * Robot domain object with numerical attributes.
@@ -20,17 +20,20 @@ export interface Robot extends DomainObject<RobotAttributeKey> {
 }
 
 /**
- * Robot axis configuration.
+ * Robot axis configuration with descriptive labels.
  */
 export const ROBOT_AXES: AxisConfig[] = [
-  { key: 'value2', label: 'value2', min: 0, max: 100 },
-  { key: 'value3', label: 'value3', min: 0, max: 100 },
-  { key: 'value4', label: 'value4', min: 0, max: 100 },
-  { key: 'value5', label: 'value5', min: 0, max: 100 },
+  { key: 'speed', label: 'Speed', min: 0, max: 100 },
+  { key: 'strength', label: 'Strength', min: 0, max: 100 },
+  { key: 'intelligence', label: 'Intelligence', min: 0, max: 100 },
+  { key: 'battery', label: 'Battery', min: 0, max: 100 },
 ];
 
 /**
  * Standard range definitions (RED, AMBER, GREEN).
+ * - Red (0-30): Poor/Critical
+ * - Amber (30-60): Average/Warning
+ * - Green (60-100): Good/Optimal
  */
 export const STANDARD_RANGES: Range[] = [
   { name: 'red', min: 0, max: 30, color: '#ef4444', opacity: 0.5 },
