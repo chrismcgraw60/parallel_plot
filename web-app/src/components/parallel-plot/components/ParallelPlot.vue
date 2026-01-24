@@ -234,6 +234,11 @@ function getPlotRenderScore(plot: PlotData): number {
 }
 
 function getPlotOpacity(plot: PlotData): number {
+  // If optimization is active, dim non-solution plots
+  if (solutionIds.value.size > 0 && !plot.state.isSolution) {
+    return mergedConfig.value.inactiveOpacity;
+  }
+  // If filtering is active, dim non-passing plots
   if (!plot.state.passesFilter) {
     return mergedConfig.value.inactiveOpacity;
   }
