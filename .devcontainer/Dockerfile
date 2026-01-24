@@ -81,6 +81,9 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 # Install Claude
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
+# Install Beads
+RUN npm install -g @beads/bd
+
 
 # Copy and set up firewall script
 # CM Disabling Firewall for this excercise
