@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { RobotDemo } from './examples/robot-harness';
+import DomainDemo from './examples/DomainDemo.vue';
 </script>
 
 <template>
-  <RobotDemo />
+  <DomainDemo />
 </template>
 
 <style>
-/* Global styles for the demo */
 * {
   box-sizing: border-box;
 }
