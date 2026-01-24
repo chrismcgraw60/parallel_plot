@@ -30,6 +30,7 @@ const parallelPlotRef = ref<InstanceType<typeof ParallelPlot> | null>(null);
 const filteredIds = ref<string[]>(robots.value.map((r) => r.id));
 const selectedId = ref<string | null>(null);
 const hasActiveFilters = ref(false);
+const hasActiveSolutions = ref(false);
 
 // ============================================================================
 // Event Handlers
@@ -46,6 +47,8 @@ function handleSelectionChange(event: SelectionChangeEvent) {
 
 function handleClearFilters() {
   parallelPlotRef.value?.clearAllFilters();
+  parallelPlotRef.value?.clearSolutions();
+  hasActiveSolutions.value = false;
 }
 
 function handleFilterByRange(rangeName: string) {
@@ -55,6 +58,7 @@ function handleFilterByRange(rangeName: string) {
 function handleOptimize(topN: number) {
   const result = findTopNBySumScore(robots.value, ROBOT_AXES, topN);
   parallelPlotRef.value?.setSolutions(result.solutionIds);
+  hasActiveSolutions.value = result.solutionIds.length > 0;
 }
 
 function handleRobotSelect(robotId: string) {
@@ -69,6 +73,8 @@ function handleRegenerateData() {
   robots.value = generateRobots(50);
   filteredIds.value = robots.value.map((r) => r.id);
   selectedId.value = null;
+  hasActiveSolutions.value = false;
+  parallelPlotRef.value?.clearSolutions();
 }
 </script>
 
@@ -84,6 +90,7 @@ function handleRegenerateData() {
     <div class="chart-section">
       <ChartControls
         :has-active-filters="hasActiveFilters"
+        :has-active-solutions="hasActiveSolutions"
         :available-ranges="availableRanges"
         :show-optimization="true"
         :top-n="3"

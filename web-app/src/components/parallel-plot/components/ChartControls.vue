@@ -8,7 +8,7 @@
  * - Optimization controls
  */
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 // ============================================================================
 // Props
@@ -17,6 +17,8 @@ import { ref } from 'vue';
 export interface Props {
   /** Whether any filters are currently active */
   hasActiveFilters?: boolean;
+  /** Whether optimization solutions are active */
+  hasActiveSolutions?: boolean;
   /** Available named ranges for filtering */
   availableRanges?: string[];
   /** Whether optimization mode is enabled */
@@ -27,10 +29,14 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   hasActiveFilters: false,
+  hasActiveSolutions: false,
   availableRanges: () => [],
   showOptimization: true,
   topN: 1,
 });
+
+/** Button is enabled when any visual filtering is active */
+const canClear = computed(() => props.hasActiveFilters || props.hasActiveSolutions);
 
 // ============================================================================
 // Emits
@@ -72,10 +78,10 @@ function handleOptimize() {
   <div class="chart-controls">
     <button
       class="control-btn control-btn--secondary"
-      :disabled="!hasActiveFilters"
+      :disabled="!canClear"
       @click="handleClearFilters"
     >
-      Clear All Filters
+      Clear All
     </button>
 
     <button
