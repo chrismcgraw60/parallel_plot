@@ -21,11 +21,16 @@ import { TRUCK_AXES, createTruckAxisRanges } from './truck-harness/types';
 import { SAMPLE_TRUCKS, generateTrucks } from './truck-harness/data';
 import TruckCard from './truck-harness/TruckCard.vue';
 
+// Creature domain
+import { CREATURE_AXES, createCreatureAxisRanges } from './creature-harness/types';
+import { SAMPLE_CREATURES, generateCreatures } from './creature-harness/data';
+import CreatureCard from './creature-harness/CreatureCard.vue';
+
 // ============================================================================
 // Domain Configuration
 // ============================================================================
 
-type DomainType = 'robots' | 'trucks';
+type DomainType = 'robots' | 'trucks' | 'creatures';
 
 interface DomainConfig {
   label: string;
@@ -51,6 +56,14 @@ const domainConfigs: Record<DomainType, DomainConfig> = {
     ranges: createTruckAxisRanges(),
     sampleData: SAMPLE_TRUCKS,
     generateData: generateTrucks,
+    availableRanges: ['green', 'amber', 'red'],
+  },
+  creatures: {
+    label: 'Creatures',
+    axes: CREATURE_AXES,
+    ranges: createCreatureAxisRanges(),
+    sampleData: SAMPLE_CREATURES,
+    generateData: generateCreatures,
     availableRanges: ['green', 'amber', 'red'],
   },
 };
@@ -131,6 +144,7 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
         <select v-model="selectedDomain" class="domain-select">
           <option value="robots">🤖 Robots</option>
           <option value="trucks">🚚 Trucks</option>
+          <option value="creatures">🐉 Creatures</option>
         </select>
       </div>
       <button class="regen-btn" @click="handleRegenerateData">
@@ -186,6 +200,18 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
             v-for="item in data"
             :key="item.id"
             :truck="item as any"
+            :is-filtered="filteredIdSet.has(item.id)"
+            :is-selected="selectedId === item.id"
+            @select="handleItemSelect"
+          />
+        </template>
+
+        <!-- Creature cards -->
+        <template v-else-if="selectedDomain === 'creatures'">
+          <CreatureCard
+            v-for="item in data"
+            :key="item.id"
+            :creature="item as any"
             :is-filtered="filteredIdSet.has(item.id)"
             :is-selected="selectedId === item.id"
             @select="handleItemSelect"
