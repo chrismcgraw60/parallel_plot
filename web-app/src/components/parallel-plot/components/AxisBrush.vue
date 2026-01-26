@@ -93,8 +93,9 @@ function setupBrush() {
     .attr('fill', '#69b3a2')
     .attr('stroke', '#458b74');
 
-  // Add double-click handler to clear the brush
-  brushGroup.select('.selection').on('dblclick', handleDoubleClick);
+  // Add double-click handler to the overlay (always exists)
+  // This will clear the brush when double-clicking on the selection area
+  brushGroup.select('.overlay').on('dblclick', handleDoubleClick);
 
   // If there's an initial extent, set it
   if (props.extent) {
@@ -109,9 +110,13 @@ function setupBrush() {
   }
 }
 
-function handleDoubleClick() {
-  clearBrush();
-  emit('brushChange', null);
+function handleDoubleClick(event: MouseEvent) {
+  // Only clear if there's an active brush extent
+  if (props.extent) {
+    event.stopPropagation();
+    clearBrush();
+    emit('brushChange', null);
+  }
 }
 
 function handleBrushStart() {

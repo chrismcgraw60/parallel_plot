@@ -308,10 +308,11 @@ function handlePlotClick(plot: PlotData) {
   const id = plot.domainObject.id;
 
   if (selectedIds.value.has(id)) {
-    selectedIds.value.delete(id);
+    // Deselect - create new empty Set
+    selectedIds.value = new Set();
   } else {
-    selectedIds.value.clear();
-    selectedIds.value.add(id);
+    // Select - create new Set with just this id
+    selectedIds.value = new Set([id]);
   }
 
   emit('selectionChange', {
@@ -416,7 +417,7 @@ function setSolutions(ids: string[]) {
 
 /** Clears optimization solutions */
 function clearSolutions() {
-  solutionIds.value.clear();
+  solutionIds.value = new Set();
 }
 
 // Expose methods to parent
@@ -439,12 +440,8 @@ defineExpose({
 watch(
   () => props.externalSelection,
   (newId) => {
-    if (newId) {
-      selectedIds.value.clear();
-      selectedIds.value.add(newId);
-    } else {
-      selectedIds.value.clear();
-    }
+    // Create new Set reference to trigger reactivity
+    selectedIds.value = newId ? new Set([newId]) : new Set();
   }
 );
 

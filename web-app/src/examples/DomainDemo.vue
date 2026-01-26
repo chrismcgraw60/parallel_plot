@@ -292,7 +292,7 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
 }
 
 .chart-container {
-  height: 400px;
+  height: clamp(200px, 40vh, 400px);
   margin-top: 12px;
   min-width: 0;
 }

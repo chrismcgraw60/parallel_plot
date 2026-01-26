@@ -12,3 +12,11 @@
 
 - Implement these additional requiremts. Use beads for tracking your work.
 - Once you have completed these requirements be sure to write them into the main requirements doc (docs/kickoff_requirements.md) in the relevant locations.
+
+### FIXES
+
+Tested latest work and some issues with recent work from docs/additional_requirements.md.
+
+- selecting domain object from clicking line now works fine. Good work.
+- For selected plot, we don't see filled circles. Needs work.
+- double clicking the extent DOES NOT clear the filter. Needs work.
