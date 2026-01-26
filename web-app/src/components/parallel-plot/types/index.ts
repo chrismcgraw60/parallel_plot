@@ -126,6 +126,18 @@ export interface PlotState {
 }
 
 /**
+ * A point where a plot line intersects an axis.
+ */
+export interface AxisIntersectionPoint {
+  /** Axis key */
+  axisKey: string;
+  /** X coordinate (axis position) */
+  x: number;
+  /** Y coordinate (value position on axis) */
+  y: number;
+}
+
+/**
  * Computed plot data combining domain object with visual state.
  */
 export interface PlotData<T extends string = string> {
@@ -135,6 +147,8 @@ export interface PlotData<T extends string = string> {
   state: PlotState;
   /** Computed SVG path data */
   pathData?: string;
+  /** Intersection points on each axis */
+  intersectionPoints?: AxisIntersectionPoint[];
 }
 
 // ============================================================================
@@ -177,6 +191,8 @@ export interface ParallelPlotConfig {
   smoothLines?: boolean;
   /** Debounce delay for filter events in ms (default: 100) */
   filterDebounceMs?: number;
+  /** Diameter of intersection circles for selected plots (default: 5) */
+  intersectionCircleDiameter?: number;
 }
 
 /**
@@ -191,6 +207,7 @@ export const DEFAULT_CONFIG: Required<ParallelPlotConfig> = {
   margin: { top: 50, right: 50, bottom: 30, left: 50 },
   smoothLines: false,
   filterDebounceMs: 100,
+  intersectionCircleDiameter: 5,
 };
 
 // ============================================================================

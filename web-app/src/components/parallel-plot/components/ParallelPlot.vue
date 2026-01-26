@@ -27,6 +27,7 @@ import {
   createXPositionScale,
   calculateDimensions,
   generateAllPathData,
+  generateIntersectionPoints,
   getAxisX,
   type YScaleMap,
   type XPositionScale,
@@ -162,19 +163,29 @@ const plotData = computed<PlotData[]>(() => {
     mergedConfig.value.smoothLines
   );
 
-  return props.data.map((obj) => ({
-    domainObject: obj,
-    state: {
-      id: obj.id,
-      passesFilter: filteredIds.value.has(obj.id),
-      isSelected: selectedIds.value.has(obj.id),
-      isHighlighted:
-        hoveredId.value === obj.id ||
-        props.externalSelection === obj.id,
-      isSolution: solutionIds.value.has(obj.id),
-    },
-    pathData: pathDataMap.get(obj.id),
-  }));
+  return props.data.map((obj) => {
+    const isHighlighted = hoveredId.value === obj.id || props.externalSelection === obj.id;
+    const isSelected = selectedIds.value.has(obj.id);
+    const isSolution = solutionIds.value.has(obj.id);
+
+    // Only compute intersection points for highlighted/selected/solution plots
+    const needsIntersectionPoints = isHighlighted || isSelected || isSolution;
+
+    return {
+      domainObject: obj,
+      state: {
+        id: obj.id,
+        passesFilter: filteredIds.value.has(obj.id),
+        isSelected,
+        isHighlighted,
+        isSolution,
+      },
+      pathData: pathDataMap.get(obj.id),
+      intersectionPoints: needsIntersectionPoints
+        ? generateIntersectionPoints(obj, props.axes, xScale.value!, yScales.value)
+        : undefined,
+    };
+  });
 });
 
 /** Sorted plot data - inactive plots rendered first (underneath) */
@@ -454,10 +465,13 @@ onMounted(() => {
     resizeObserver.observe(containerRef.value);
     updateDimensions();
   }
+  // Also listen to window resize as backup for some browsers
+  window.addEventListener('resize', updateDimensions);
 });
 
 onUnmounted(() => {
   resizeObserver?.disconnect();
+  window.removeEventListener('resize', updateDimensions);
 });
 </script>
 
@@ -520,6 +534,23 @@ onUnmounted(() => {
           />
         </g>
 
+        <!-- Intersection circles layer (for selected/highlighted plots) -->
+        <g class="intersection-circles-layer">
+          <template v-for="plot in sortedPlotData" :key="`circles-${plot.domainObject.id}`">
+            <circle
+              v-for="point in plot.intersectionPoints"
+              :key="`${plot.domainObject.id}-${point.axisKey}`"
+              :cx="point.x"
+              :cy="point.y"
+              :r="mergedConfig.intersectionCircleDiameter / 2"
+              :fill="getPlotColor(plot)"
+              :stroke="'white'"
+              :stroke-width="1"
+              class="intersection-circle"
+            />
+          </template>
+        </g>
+
         <!-- Brush layer (rendered last, on top) -->
         <g class="brush-layer">
           <AxisBrush
@@ -543,10 +574,12 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   min-height: 200px;
+  overflow: hidden;
 }
 
 .parallel-plot-svg {
   display: block;
+  max-width: 100%;
 }
 
 .plot-line {

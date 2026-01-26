@@ -93,6 +93,9 @@ function setupBrush() {
     .attr('fill', '#69b3a2')
     .attr('stroke', '#458b74');
 
+  // Add double-click handler to clear the brush
+  brushGroup.select('.selection').on('dblclick', handleDoubleClick);
+
   // If there's an initial extent, set it
   if (props.extent) {
     const yScaleMap = new Map([[props.axisKey, props.scale]]);
@@ -104,6 +107,11 @@ function setupBrush() {
     );
     brushGroup.call(brushBehavior.move, [y1, y2]);
   }
+}
+
+function handleDoubleClick() {
+  clearBrush();
+  emit('brushChange', null);
 }
 
 function handleBrushStart() {

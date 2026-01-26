@@ -9,7 +9,7 @@ import { ref, computed, watch } from 'vue';
 import { ParallelPlot } from '../components/parallel-plot';
 import ChartControls from '../components/parallel-plot/components/ChartControls.vue';
 import { findTopNBySumScore } from '../components/parallel-plot/utils/optimization';
-import type { FilterChangeEvent, DomainObject, AxisConfig, AxisRanges } from '../components/parallel-plot/types';
+import type { FilterChangeEvent, RequestSelectionChangeEvent, DomainObject, AxisConfig, AxisRanges } from '../components/parallel-plot/types';
 
 // Robot domain
 import { ROBOT_AXES, createRobotAxisRanges } from './robot-harness/types';
@@ -124,6 +124,10 @@ function handleItemSelect(itemId: string) {
   selectedId.value = selectedId.value === itemId ? null : itemId;
 }
 
+function handleRequestSelectionChange(event: RequestSelectionChangeEvent) {
+  selectedId.value = event.requestedId;
+}
+
 function handleRegenerateData() {
   data.value = currentConfig.value.generateData(30);
   filteredIds.value = data.value.map((d) => d.id);
@@ -172,6 +176,7 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
           :ranges="currentConfig.ranges"
           :external-selection="selectedId"
           @filter-change="handleFilterChange"
+          @request-selection-change="handleRequestSelectionChange"
         />
       </div>
     </div>
@@ -289,6 +294,7 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
 .chart-container {
   height: 400px;
   margin-top: 12px;
+  min-width: 0;
 }
 
 .items-section {

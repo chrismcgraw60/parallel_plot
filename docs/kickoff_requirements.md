@@ -34,6 +34,8 @@ We want to build a reusable parallel plot chart for data visualision.
 - **Multi-Axis Display**: Render multiple parallel y-`Axis`es, each representing a numerical `Attribute` of the `Domain Object`s.
 - **Polyline Representation**: Display each `Domain Object` as a single polyline connecting points across all y-`Axis`es.
 - **Contextual Ranges**: Display colored bars (e.g., Red, Amber, Green) on `Axis`es to define domain-specific `Range`s/thresholds.
+- **Selection Emphasis**: When a `Plot` is selected or highlighted, draw filled circles at each axis intersection point to provide visual emphasis. Circle diameter is configurable (default: 5px).
+- **Responsive Layout**: The chart automatically resizes when its parent container or browser window changes size.
 
 #### Interactive Filtering
 
@@ -42,6 +44,7 @@ We want to build a reusable parallel plot chart for data visualision.
   - Visualize the `Brush` with a distinct overlay.
   - **Active State**: `Plot`s passing through the filter `Range` remain at full opacity.
   - **Inactive State**: `Plot`s outside the filter `Range` are rendered with reduced opacity (ghosted).
+  - **Double-Click to Clear**: Double-clicking on a `Brush` extent clears that filter.
 - **Composite Filtering**: Support multiple active `Brush`es across different `Axis`es simultaneously (AND logic).
 
 #### External Control (2-Way Binding)
@@ -49,6 +52,9 @@ We want to build a reusable parallel plot chart for data visualision.
 - **External Selection**:
   - When a specific `Domain Object` is selected in the surrounding application (e.g., user clicks a Robot card), the chart must filter to show only that object.
   - **Robustness**: The chart's internal filter logic must gracefully handle external updates without conflict (e.g., clearing conflicting brushes or overriding them temporarily).
+- **Chart-to-Application Selection**:
+  - When a user clicks on a `Plot` line in the chart, the chart emits a `RequestSelectionChange` event.
+  - External components (e.g., a Robot card grid) should listen for this event and update their selection state accordingly, enabling full 2-way sync.
 
 #### Global Controls
 
@@ -66,6 +72,7 @@ We want to build a reusable parallel plot chart for data visualision.
   - `Axes`: Configuration for each `Axis` (label, range, etc.).
   - `Ranges`: A set of named `Range` definitions (e.g., Green: 80-100) for specific `Axis`es.
   - `ExternalSelection`: The ID or reference to a specific `Domain Object` selected externally.
+  - `Config`: Optional configuration overrides including `intersectionCircleDiameter` (default: 5px).
 - **Events (Outputs)**:
   - `FilterChange`: Emitted when the active filter state changes.
   - `SelectionChange`: Emitted when specific `Plot`s are selected internally or via optimization.

@@ -12,6 +12,7 @@ import type {
   AxisConfig,
   ChartDimensions,
   DomainObject,
+  AxisIntersectionPoint,
 } from '../types';
 
 // ============================================================================
@@ -196,6 +197,27 @@ export function generateAllPathData(
   }
 
   return paths;
+}
+
+/**
+ * Generates intersection points for a domain object on all axes.
+ *
+ * @param domainObject - The domain object
+ * @param axes - Array of axis configurations
+ * @param xScale - X position scale
+ * @param yScales - Map of Y-scales
+ * @returns Array of intersection points
+ */
+export function generateIntersectionPoints(
+  domainObject: DomainObject,
+  axes: AxisConfig[],
+  xScale: XPositionScale,
+  yScales: YScaleMap
+): AxisIntersectionPoint[] {
+  return axes.map((axis) => {
+    const [x, y] = getPointCoordinate(domainObject, axis.key, xScale, yScales);
+    return { axisKey: axis.key, x, y };
+  });
 }
 
 // ============================================================================
