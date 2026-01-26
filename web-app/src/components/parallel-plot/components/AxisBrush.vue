@@ -54,6 +54,8 @@ const emit = defineEmits<{
 const brushGroupRef = ref<SVGGElement | null>(null);
 let brushBehavior: d3.BrushBehavior<unknown> | null = null;
 let isBrushing = false;
+let lastClickTime = 0;
+const DOUBLE_CLICK_THRESHOLD = 300; // ms
 
 // ============================================================================
 // Brush Setup
@@ -93,9 +95,9 @@ function setupBrush() {
     .attr('fill', '#69b3a2')
     .attr('stroke', '#458b74');
 
-  // Add double-click handler to the overlay (always exists)
-  // This will clear the brush when double-clicking on the selection area
-  brushGroup.select('.overlay').on('dblclick', handleDoubleClick);
+  // Add double-click handler to clear the brush
+  // We attach to both overlay and selection to ensure it works
+  brushGroup.on('dblclick', handleDoubleClick);
 
   // If there's an initial extent, set it
   if (props.extent) {
@@ -110,16 +112,27 @@ function setupBrush() {
   }
 }
 
-function handleDoubleClick(event: MouseEvent) {
+function handleDoubleClick() {
   // Only clear if there's an active brush extent
   if (props.extent) {
-    event.stopPropagation();
     clearBrush();
     emit('brushChange', null);
   }
 }
 
-function handleBrushStart() {
+function handleBrushStart(event: d3.D3BrushEvent<unknown>) {
+  // Detect double-click by checking time since last brush start
+  const now = Date.now();
+  if (now - lastClickTime < DOUBLE_CLICK_THRESHOLD && props.extent) {
+    // This is a double-click - clear the brush instead of starting a new one
+    event.sourceEvent?.stopPropagation();
+    clearBrush();
+    emit('brushChange', null);
+    lastClickTime = 0;
+    return;
+  }
+  lastClickTime = now;
+
   isBrushing = true;
   emit('brushStart');
 }

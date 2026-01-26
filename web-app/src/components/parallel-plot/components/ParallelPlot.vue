@@ -164,8 +164,10 @@ const plotData = computed<PlotData[]>(() => {
   );
 
   return props.data.map((obj) => {
-    const isHighlighted = hoveredId.value === obj.id || props.externalSelection === obj.id;
-    const isSelected = selectedIds.value.has(obj.id);
+    const isExternallySelected = props.externalSelection === obj.id;
+    const isHovered = hoveredId.value === obj.id;
+    const isHighlighted = isHovered || isExternallySelected;
+    const isSelected = selectedIds.value.has(obj.id) || isExternallySelected;
     const isSolution = solutionIds.value.has(obj.id);
 
     // Only compute intersection points for highlighted/selected/solution plots
