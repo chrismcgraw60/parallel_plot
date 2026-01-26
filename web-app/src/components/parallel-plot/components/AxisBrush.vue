@@ -121,17 +121,20 @@ function handleDoubleClick() {
 }
 
 function handleBrushStart(event: d3.D3BrushEvent<unknown>) {
-  // Detect double-click by checking time since last brush start
-  const now = Date.now();
-  if (now - lastClickTime < DOUBLE_CLICK_THRESHOLD && props.extent) {
-    // This is a double-click - clear the brush instead of starting a new one
-    event.sourceEvent?.stopPropagation();
-    clearBrush();
-    emit('brushChange', null);
-    lastClickTime = 0;
-    return;
+  // Only apply double-click detection for actual user interactions
+  // (sourceEvent is null for programmatic brush moves like filterByNamedRange)
+  if (event.sourceEvent) {
+    const now = Date.now();
+    if (now - lastClickTime < DOUBLE_CLICK_THRESHOLD && props.extent) {
+      // This is a double-click - clear the brush instead of starting a new one
+      event.sourceEvent.stopPropagation();
+      clearBrush();
+      emit('brushChange', null);
+      lastClickTime = 0;
+      return;
+    }
+    lastClickTime = now;
   }
-  lastClickTime = now;
 
   isBrushing = true;
   emit('brushStart');
