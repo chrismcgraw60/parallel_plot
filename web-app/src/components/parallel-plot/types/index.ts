@@ -207,7 +207,7 @@ export const DEFAULT_CONFIG: Required<ParallelPlotConfig> = {
   margin: { top: 50, right: 50, bottom: 30, left: 50 },
   smoothLines: false,
   filterDebounceMs: 100,
-  intersectionCircleDiameter: 8,
+  intersectionCircleDiameter: 12,
 };
 
 // ============================================================================
