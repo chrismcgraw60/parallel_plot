@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import DomainDemo from './examples/DomainDemo.vue';
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <DomainDemo />
+  <RouterView />
 </template>
 
 <style>

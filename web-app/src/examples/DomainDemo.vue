@@ -6,6 +6,7 @@
  */
 
 import { ref, computed, watch } from 'vue';
+import { RouterLink } from 'vue-router';
 import { ParallelPlot } from '../components/parallel-plot';
 import ChartControls from '../components/parallel-plot/components/ChartControls.vue';
 import { findTopNBySumScore } from '../components/parallel-plot/utils/optimization';
@@ -142,6 +143,9 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
 
 <template>
   <div class="domain-demo">
+    <nav class="breadcrumb">
+      <RouterLink to="/" class="back-link">&larr; All Demos</RouterLink>
+    </nav>
     <header class="demo-header">
       <div class="header-left">
         <h1>Parallel Plot Demo</h1>
@@ -235,6 +239,20 @@ const filteredIdSet = computed(() => new Set(filteredIds.value));
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.breadcrumb {
+  margin-bottom: -8px;
+}
+
+.back-link {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.back-link:hover {
+  color: #3b82f6;
 }
 
 .demo-header {
